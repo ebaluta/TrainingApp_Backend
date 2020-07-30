@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "edyta.app.jwtSecret",
+      "type": "java.lang.String",
+      "description": "Description for edyta.app.jwtSecret."
+  }
+] }
