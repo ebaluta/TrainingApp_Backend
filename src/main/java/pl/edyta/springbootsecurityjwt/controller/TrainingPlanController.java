@@ -1,13 +1,10 @@
 package pl.edyta.springbootsecurityjwt.controller;
 
-import com.mongodb.client.model.changestream.UpdateDescription;
-import com.mongodb.client.result.UpdateResult;
+import org.hibernate.sql.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.data.mongodb.core.query.UpdateDefinition;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.edyta.springbootsecurityjwt.models.TrainingPlanDay;
 import pl.edyta.springbootsecurityjwt.models.enums.Week;
@@ -85,8 +82,17 @@ public class TrainingPlanController {
 
        operations.updateFirst(query, update, TrainingPlanDay.class);
 
+
    }
 
+
+   @GetMapping("/delete")
+    public void deleteTrainingPlanDay(@RequestBody TrainingPlanDay trainingPlanDay,
+                                      @RequestHeader("Username") String username){
+
+       Query query = new Query(where("Username").is(username).and("day").is(trainingPlanDay.getDay()));
+      operations.remove(query,TrainingPlanDay.class);
+   }
 
 
 }

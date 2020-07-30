@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.edyta.springbootsecurityjwt.models.ERole;
 import pl.edyta.springbootsecurityjwt.models.Role;
@@ -28,6 +30,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @CrossOrigin(value = "*", maxAge = 3600)
+@EnableTransactionManagement
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -117,5 +120,12 @@ public class AuthController {
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 
+    }
+
+
+    @Transactional
+    @GetMapping("/delet/{username}")
+    public void deleteUserByUsername(@PathVariable String username){
+        userRepository.deleteAllByUsername(username);
     }
 }
