@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.edyta.springbootsecurityjwt.models.TrainingPlanDay;
 import pl.edyta.springbootsecurityjwt.models.enums.Week;
@@ -20,15 +21,13 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(value = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/plan")
+@RequestMapping("/api/plan")
 public class TrainingPlanController {
 
     TrainingPlanDayRepo trainingPlanDayRepo;
 
-
     @Autowired
     MongoOperations operations;
-
 
 
     @Autowired
@@ -37,6 +36,7 @@ public class TrainingPlanController {
     }
 
     @PostMapping(value = "/add")
+    @PreAuthorize("hasRole('USER')")
     public TrainingPlanDay addTraining(@RequestHeader("Username") String username,
                                        @RequestBody AddTrainingDay addTrainingDay){
 
@@ -65,11 +65,13 @@ public class TrainingPlanController {
     }
 
     @GetMapping("/{username}/all")
+    @PreAuthorize("hasRole('USER')")
     public List <TrainingPlanDay> getAllOfUser(@PathVariable String username) {
         return trainingPlanDayRepo.findAllByUsername(username);
     }
 
    @PostMapping("/update")
+   @PreAuthorize("hasRole('USER')")
     public void updateTrainingDay(@RequestBody TrainingPlanDay trainingPlanDay,
                                   @RequestHeader("Username") String username) {
 
@@ -87,6 +89,7 @@ public class TrainingPlanController {
 
 
    @GetMapping("/delete")
+   @PreAuthorize("hasRole('USER')")
     public void deleteTrainingPlanDay(@RequestBody TrainingPlanDay trainingPlanDay,
                                       @RequestHeader("Username") String username){
 

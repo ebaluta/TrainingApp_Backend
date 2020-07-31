@@ -32,8 +32,8 @@ public class TrainingController {
     }
 
     @PostMapping("/user/add")
-    @PreAuthorize("hasRole('USER')")
     public Training addTraining(@RequestBody AddTraining addTraining){
+
         Training training=new Training();
         training.setDate(addTraining.getDate());
         training.setDistance(addTraining.getDistance());
@@ -46,7 +46,6 @@ public class TrainingController {
     }
 
     @PostMapping( value = "/user/update/{id}")
-    @PreAuthorize("hasRole('USER')")
     public Training updateTraining(@RequestBody AddTraining addTraining,
                                   @PathVariable int id,
                                    @RequestHeader("Username") String username){
@@ -68,7 +67,6 @@ public class TrainingController {
 
 
     @GetMapping("/{username}/training")
-    @PreAuthorize("hasRole('USER')")
     public List <Training> getUserTrainings(@PathVariable String username){
         User user= userRepository.findByUsername(username).get();
         List <Training> usersTrainings=new ArrayList<>();

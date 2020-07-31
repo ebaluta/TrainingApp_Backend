@@ -52,6 +52,7 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
+
         Authentication authentication= authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),loginRequest.getPassword())
         );
@@ -84,6 +85,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         }
 
+
         //Create new user's account
         User user = new User(
                 signupRequest.getUsername(),
@@ -92,6 +94,7 @@ public class AuthController {
 
         Set <String> strRoles= signupRequest.getRoles();
         Set<Role> roles=new HashSet<>();
+
         if(strRoles==null){
             Role userRole=roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(()->new RuntimeException("Role is not found"));
@@ -124,8 +127,9 @@ public class AuthController {
 
 
     @Transactional
-    @GetMapping("/delet/{username}")
+    @DeleteMapping("/delete/{username}")
     public void deleteUserByUsername(@PathVariable String username){
         userRepository.deleteAllByUsername(username);
     }
+
 }
